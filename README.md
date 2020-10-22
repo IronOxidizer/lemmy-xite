@@ -1,7 +1,12 @@
-# lemmy-lite
-A static, JSless, touch-friendly Lemmy frontend built for legacy web clients and maximum performance
+# lemmy-xite
+A cross-site implementation of lemmy-lite
 
-This project is not intended for official use, but rather as a proof-of-concept for pre-rendering [Lemmy](https://github.com/LemmyNet/lemmy). Eventually it will transition into a microservice that is ran alongside Lemmy, for example, under *lite.lemmy.com* or *lemmy.com/lite*. Ideally it will run on the same machine removing any extra latency in API calls.
+This project stands as a standalone frontend server for pre-rendering any [Lemmy](https://github.com/LemmyNet/lemmy) instance.
+
+### xite?
+- **x** as in **cross**
+- **ite** as in **site**
+- Pronounced as *excite*
 
 ### Built With
 
@@ -28,10 +33,10 @@ This project is not intended for official use, but rather as a proof-of-concept 
 - Symlinks won't work since nginx user (root) requires ownership of linked file
 - GZip static to allow serving of compressed files for lower bandwidth usage
 ```
-cd lemmy-lite
+cd lemmy-xite
 gzip -kr9 static
-cp -rf static /etc/nginx/lemmy-lite
-cp -f lemmy-lite.conf /etc/nginx/sites-enabled/
+cp -rf static /etc/nginx/lemmy-xite
+cp -f lemmy-xite.conf /etc/nginx/sites-enabled/
 systemctl start nginx
 cargo run --release
 ```
@@ -44,18 +49,19 @@ Android|Desktop|iOS
 
 ## Notes
 
-1. As of 0.2.0 (Aug2020) worst case scenario ([240 comment thread](https://lemmylite.crabdance.com/dev.lemmy.ml/post/30493)) takes 9ms to render on server.
+1. As of 0.2.0 (Aug2020) worst case scenario ([240 comment thread](https://lemmyxite.crabdance.com/dev.lemmy.ml/post/30493)) takes 9ms to render on server.
 2. First load fetches a stylesheet, favicon, and svgs. These are cached so all subsequent pages require only a single HTML request.
 3. I use CSS Tables instead of FlexBox and Grid because Tables are [faster](https://benfrain.com/css-performance-test-flexbox-v-css-table-fight), simpler, and have much better legacy support. Using CSS tables over HTML tables avoids excess DOM objects.
 4. Each page refresh is limited to API critical chain of 1 to limit the impact on instances and to keep page times fast.
 5. 1.0.0 is set for when account functionality is stabilized.
 6. Ideally, static content is served through a CDN to further improve server performance and response times.
 7. Strictly only uses characters from [BMP](https://en.wikipedia.org/wiki/Plane_%28Unicode%29#Basic_Multilingual_Plane) for legacy font support.
-8. Catch me developing lemmy-lite on my streams at [Twitch](https://www.twitch.tv/ironoxidizer) or [YouTube](https://www.youtube.com/channel/UCXeNgKTWtqOuIMXnhBHAskw)
+8. Catch me developing lemmy-xite on my streams at [Twitch](https://www.twitch.tv/ironoxidizer) or [YouTube](https://www.youtube.com/channel/UCXeNgKTWtqOuIMXnhBHAskw)
 
 ## TODO
 
-1. Fix user and community links (change markdown interpretation for same-site links)
+0. Implement simple docker deployment.
+1. Fix user and community links (change markdown interpretation for same-site links).
 2. Consider not supporting UTF-8 and only using ASCII characters for data size and better legacy font support.
 3. Consider switching from Maud to [Sailfish](https://github.com/Kogia-sima/sailfish/tree/master/benches) to improve performance.
 
@@ -66,7 +72,7 @@ Android|Desktop|iOS
 ## Update Script
 
 ```
-killall lemmy-lite
+killall lemmy-xite
 git pull
 rm static/*.gz
 gzip -rk9f static
@@ -78,7 +84,7 @@ for i in static/*gz; do
     rm -f "$i"
   fi
 done
-sudo rm -rf /etc/nginx/lemmy-lite
-sudo cp -rf static /etc/nginx/lemmy-lite
+sudo rm -rf /etc/nginx/lemmy-xite
+sudo cp -rf static /etc/nginx/lemmy-xite
 nohup cargo run --release &
 ```
