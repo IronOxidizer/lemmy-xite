@@ -34,7 +34,7 @@ This project stands as a standalone frontend server for pre-rendering any [Lemmy
 - GZip static to allow serving of compressed files for lower bandwidth usage
 ```
 cd lemmy-xite
-gzip -kr9 static
+pigz -rk11f static
 cp -rf static /etc/nginx/lemmy-xite
 cp -f lemmy-xite.conf /etc/nginx/sites-enabled/
 systemctl start nginx
@@ -75,7 +75,7 @@ Android|Desktop|iOS
 killall lemmy-xite
 git pull
 rm static/*.gz
-gzip -rk9f static
+pigz -rk11f static
 for i in static/*gz; do
   [ -f "$i" ] || break
   j="${i%.*}"
